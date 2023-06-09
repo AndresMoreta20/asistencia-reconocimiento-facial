@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "asistencia-angular"
+  },
+  "targets": {
+    "asistencia-angular": {
+      "hosting": {
+        "face-recognition": [
+          "asistencia-angular"
+        ]
+      }
+    }
+  }
+}

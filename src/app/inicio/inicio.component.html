@@ -1,0 +1,42 @@
+<app-header></app-header>
+
+<div class="container">
+    <div id="videoD" class="position-relative">
+    <video #videoElement class="embed-responsive-item" width="600" height="450" autoplay></video>
+      <div id="canvasContainer" class="position-absolute top-0 start-0"></div>
+    </div>
+  </div>
+  
+
+
+
+<div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Asistencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let miembro of miembros">
+          <td>{{ miembro.nombre }} {{miembro.apellido}}</td>
+          <td>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="miembro.asistencia"
+                (change)="toggleAsistencia(miembro)"
+                [disabled]="!allowToggle"
+                id="{{ miembro.nombre }}"
+              />
+              <label class="form-check-label" for="{{ miembro.nombre }}"></label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn btn-primary" (click)="guardarAsistencia()">Guardar Asistencia</button>

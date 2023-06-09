@@ -1,0 +1,15 @@
+<app-header></app-header>
+<div class="container">
+  <h2>Lista de Miembros</h2>
+  <div *ngFor="let miembro of miembros" class="card">
+    <div class="card-body">
+      <h3 class="card-title">{{ miembro.nombre }} {{ miembro.apellido }}</h3>
+      <p class="card-text">Cédula: {{ miembro.cedula }}</p>
+      <p class="card-text">Género: {{ miembro.genero }}</p>
+      <p class="card-text">Fecha de Nacimiento: {{ miembro.fechaNacimiento }}</p>
+      <img width="200"  [src]="miembro.foto" alt="Foto de {{ miembro.nombre }} {{ miembro.apellido }}" class="img-fluid">
+      <br><br>
+      <button class="btn btn-outline-danger" (click)="onClickDelete(miembro)">Borrar</button>
+    </div>
+  </div>
+</div>

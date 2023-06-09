@@ -1,0 +1,41 @@
+<app-header></app-header>
+<div class="container">
+    <h2>Ingresar Datos</h2>
+    <form (ngSubmit)="guardarDatos()">
+      <div class="form-group">
+        <label for="cedula">Cédula:</label>
+        <input type="text" class="form-control" id="cedula" [(ngModel)]="datos.cedula" name="cedula" required>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" [(ngModel)]="datos.nombre" name="nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <input type="text" class="form-control" id="apellido" [(ngModel)]="datos.apellido" name="apellido" required>
+      </div>
+      <div class="form-group">
+        <label for="genero">Género:</label>
+        <select class="form-control" id="genero" [(ngModel)]="datos.genero" name="genero" required>
+          <option value="masculino">Masculino</option>
+          <option value="femenino">Femenino</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+        <input type="date" class="form-control" id="fechaNacimiento" [(ngModel)]="datos.fechaNacimiento" name="fechaNacimiento" required>
+      </div>
+      <ng-container *ngIf="datos.nombre != '' && datos.apellido != ''"> 
+      <div class="form-group">
+        <label for="foto">Foto:</label>
+        <input type="file" class="form-control" id="foto" (change)="cargarFoto($event)" accept="image/*" required>
+      </div>
+    </ng-container>
+      <br>
+      <ng-container *ngIf="!ocultarBoton">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </ng-container>
+    </form>
+
+  </div>
+  
