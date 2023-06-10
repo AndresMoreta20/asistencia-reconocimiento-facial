@@ -11,6 +11,9 @@ import Miembro from '../interfaces/miembro.interface';
 
 import { ActivatedRoute } from '@angular/router';
 
+import { saveAs } from 'file-saver';
+
+
 declare const faceapi: any;
 
 @Component({
@@ -226,11 +229,64 @@ export class InicioComponent implements OnInit {
   }
 
   guardarAsistencia() {
+    const asistencia: object = {};
+    const fechaActual = new Date();
+  
+    const asistenciaT: object = { lista: this.miembros, fecha: fechaActual };
+  
+    this.miembrosService.addAsistencia(asistenciaT);
+  
+    const csvString = this.convertirAStringCSV(asistenciaT);
+  
+    // Crea un nuevo objeto Blob con el texto CSV
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
+  
+    // Descarga el archivo CSV utilizando file-saver
+    saveAs(blob, 'asistencia.csv');
+  }
+  
+  private convertirAStringCSV(objetoDatos: any): string {
+    const columnas = Object.keys(objetoDatos);
+    const filas = [columnas.map((columna) => this.obtenerValorCSV(objetoDatos[columna])).join(',')];
+    return columnas.join(',') + '\n' + filas.join('\n');
+  }
+  
+  private obtenerValorCSV(valor: any): string {
+    if (typeof valor === 'object' && valor !== null) {
+      return JSON.stringify(valor); // Puedes ajustar cómo deseas representar los objetos anidados en CSV
+    } else {
+      return valor.toString();
+    }
+  }
+  
+/*
+  guardarAsistencia() {
     let asitencia: object = {};
     const fechaActual = new Date();
 
     let asistenciaT: object = { lista: this.miembros, fecha: fechaActual };
 
     this.miembrosService.addAsistencia(asistenciaT);
+
+    const csvString = this.convertirAStringCSV(asistenciaT);
+
+    // Crea un nuevo objeto Blob con el texto CSV
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
+
+    // Descarga el archivo CSV utilizando file-saver
+    saveAs(blob, 'asistencia.csv');
   }
+
+
+
+
+
+  private convertirAStringCSV(objetoDatos: any): string {
+    const columnas = Object.keys(objetoDatos[0]);
+    const filas = objetoDatos.map((fila: any) => {
+      return columnas.map((columna) => fila[columna]).join(',');
+    });
+    return columnas.join(',') + '\n' + filas.join('\n');
+  }*/
+  
 }
