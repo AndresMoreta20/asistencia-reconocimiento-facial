@@ -37,8 +37,7 @@ export class InicioComponent implements OnInit {
       nombre: 'Todd',
       apellido: 'Howard',
       asistencia: false,
-    },
-    // Agrega más miembros aquí si es necesario
+    }
   ];
   // asistenciaLista: any = {nombre:"", asistencia:false}
 
@@ -227,7 +226,85 @@ export class InicioComponent implements OnInit {
     reader.readAsDataURL(file);
     this.detectFaces();
   }
+  guardarAsistencia() {
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toLocaleString('es-ES', { hour12: true }).replace(/\u200E/g, '');
 
+    const asistenciaT: object = { lista: this.miembros, fecha: fechaFormateada };
+    this.miembrosService.addAsistencia(asistenciaT);
+    const csvString = this.convertirAStringCSV(asistenciaT);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'asistencia.csv');
+  }
+  
+  private convertirAStringCSV(objetoDatos: any): string {
+    let columnas = ['Nombre', 'Asistencia', 'fecha'];
+    let filas = [];
+    for (let i = 0; i < objetoDatos.lista.length; i++) {
+      let fila = [];
+      fila.push(objetoDatos.lista[i].nombre);
+      fila.push(objetoDatos.lista[i].asistencia);
+      if (i === 0) {
+        fila.push(this.obtenerValorCSV(objetoDatos.fecha));
+      } else {
+        fila.push('');
+      }
+      filas.push(fila.join(','));
+    }
+    return columnas.join(',') + '\n' + filas.join('\n');
+  }
+  
+  private obtenerValorCSV(valor: any): string {
+    if (typeof valor === 'object' && valor !== null) {
+      return JSON.stringify(valor);
+    } else {
+      return valor.toString();
+    }
+  }
+  
+  /*
+  guardarAsistencia() {
+    const fechaActual = new Date();
+    const asistenciaT: object = { lista: this.miembros, fecha: fechaActual };
+    this.miembrosService.addAsistencia(asistenciaT);
+    const csvString = this.convertirAStringCSV(asistenciaT);
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'asistencia.csv');
+  }
+  
+  private convertirAStringCSV(objetoDatos: any): string {
+    let columnas = Object.keys(objetoDatos);
+    columnas.splice(columnas.indexOf('fecha'), 1);
+    columnas.push('fecha');
+    let filas = [];
+    for (let i = 0; i < objetoDatos.lista.length; i++) {
+      let fila = [];
+      for (let j = 0; j < columnas.length; j++) {
+        let valor = objetoDatos[columnas[j]];
+        if (Array.isArray(valor)) {
+          fila.push(this.obtenerValorCSV(valor[i]));
+        } else {
+          if (i === 0) {
+            fila.push(this.obtenerValorCSV(valor));
+          } else {
+            fila.push('');
+          }
+        }
+      }
+      filas.push(fila.join(','));
+    }
+    return columnas.join(',') + '\n' + filas.join('\n');
+  }
+  
+  private obtenerValorCSV(valor: any): string {
+    if (typeof valor === 'object' && valor !== null) {
+      return JSON.stringify(valor);
+    } else {
+      return valor.toString();
+    }
+  }
+  
+/*
   guardarAsistencia() {
     const asistencia: object = {};
     const fechaActual = new Date();
